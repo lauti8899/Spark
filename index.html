@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparkLink: Conecta y Explora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS para colores y fuentes */
+        :root {
+            --primary-color: #6a00ff; /* Púrpura vibrante */
+            --secondary-color: #00e676; /* Verde lima */
+            --accent-color: #ff3366; /* Rosa fucsia */
+            --background-dark: #1a1a2e; /* Azul oscuro casi negro */
+            --background-light: #2c2c54; /* Azul más claro */
+            --text-color: #e0e0e0;
+            --border-color: #4a4a8a;
+            --font-stack: 'Poppins', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--background-dark);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden; /* Evitar scroll horizontal por animaciones */
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--background-light);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite alternate; /* Animación simple para el logo */
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        .navbar nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar nav ul li {
+            margin-right: 30px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .navbar nav ul li:hover,
+        .navbar nav ul li.active {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 0, 255, 0.4);
+        }
+
+        .navbar nav ul li i {
+            margin-right: 8px;
+            font-size: 1.2em; /* Íconos (usar Font Awesome o similar) */
+        }
+
+        /* Placeholders para iconos (reemplazar con Font Awesome o SVGs) */
+        .icon-home::before { content: '🏠'; }
+        .icon-explore::before { content: '🌐'; }
+        .icon-create::before { content: '✨'; }
+        .icon-connections::before { content: '👥'; }
+        .icon-messages::before { content: '💬'; }
+        .icon-bell::before { content: '🔔'; }
+
+        .profile-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-nav .username {
+            margin-right: 15px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .profile-nav .profile-pic {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid var(--secondary-color);
+            cursor: pointer;
+            background-image: url('https://via.placeholder.com/40/FF3366/FFFFFF?text=P'); /* Placeholder de imagen de perfil */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .notifications-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-count {
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.7em;
+            padding: 3px 7px;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            border: 1px solid var(--background-dark);
+        }
+
+        /* Contenido Principal */
+        .content {
+            padding: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--background-light);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            min-height: 70vh;
+            position: relative; /* Para las transiciones de las pestañas */
+            overflow: hidden; /* Para que las animaciones de salida no se desborden */
+        }
+
+        .tab-content {
+            display: none; /* Ocultar todas las pestañas por defecto */
+            animation: fadeIn 0.6s ease-out forwards;
+            position: absolute;
+            width: calc(100% - 40px); /* Ajustar al padding del content */
+            padding: 20px 0;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideIn var(--transition-speed) ease-out forwards;
+            position: relative; /* Restablecer la posición para la pestaña activa */
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Animación de entrada de pestaña */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Animación de salida de pestaña (se manejará con JS) */
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+
+
+        .tab-content h2 {
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-size: 2em;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Input de Publicación */
+        .post-input {
+            background-color: var(--background-dark);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .post-input textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #3a3a60;
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            font-size: 1em;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.3s ease;
+        }
+
+        .post-input textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(106, 0, 255, 0.3);
+        }
+
+        .spark-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            align-self: flex-end; /* Alinear a la derecha */
+        }
+
+        .spark-button:hover {
+            background-color: #8c4bff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(106, 0, 255, 0.5);
+        }
+
+        /* Feed de Publicaciones */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .post {
+            background-color: var(--background-dark);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden; /* Para contener las animaciones de explosión */
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid var(--accent-color);
+            background-image: url('https://via.placeholder.com/50/00E676/FFFFFF?text=U'); /* Placeholder de avatar */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .post-username {
+            font-weight: 700;
+            color: var(--secondary-color);
+            font-size: 1.1em;
+        }
+
+        .post-content p {
+            margin-bottom: 15px;
+            font-size: 1em;
+            color: var(--text-color);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1em;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .react-button {
+            color: var(--accent-color); /* Color específico para el botón de reacción */
+        }
+
+        /* Animaciones */
+
+        /* Partículas de reacción */
+        .reaction-particle {
+            position: absolute;
+            background-color: var(--accent-color); /* Color por defecto, se puede cambiar con JS */
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: particleExplosion 0.8s forwards;
+            z-index: 10;
+        }
+
+        @keyframes particleExplosion {
+            0% {
+                transform: translate(0, 0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Animación para el spark burst (ejemplo básico) */
+        .spark-burst-animation {
+            position: relative;
+            height: 50px; /* Ajusta la altura según sea necesario */
+            margin-top: 10px;
+            overflow: hidden;
+            display: none; /* Oculto por defecto */
+        }
+
+        .spark-burst-animation.active {
+            display: block;
+            animation: sparkFadeIn 0.5s ease-out;
+        }
+
+        @keyframes sparkFadeIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Ejemplo de animación de partículas para Spark Burst (simple) */
+        .spark-burst-animation::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, var(--accent-color) 10%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: burstEffect 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes burstEffect {
+            0% { width: 0; height: 0; opacity: 0.8; }
+            50% { width: 100px; height: 100px; opacity: 0.4; }
+            100% { width: 200px; height: 200px; opacity: 0; }
+        }
+
+        /* Media Queries para Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px 10px;
+            }
+
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 15px;
+            }
+
+            .navbar nav ul li {
+                margin: 5px 10px;
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+
+            .profile-nav {
+                margin-top: 15px;
+            }
+
+            .content {
+                margin: 10px auto;
+                padding: 15px;
+            }
+
+            .tab-content h2 {
+                font-size: 1.6em;
+            }
+
+            .post-input textarea {
+                min-height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar .logo {
+                font-size: 1.5em;
+            }
+            .profile-nav .username {
+                display: none; /* Ocultar nombre en móviles muy pequeños */
+            }
+            .profile-nav .profile-pic {
+                margin-right: 5px;
+            }
+            .navbar nav ul li {
+                margin: 3px 5px;
+                font-size: 0.8em;
+            }
+            .action-button {
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">SparkLink</div>
+        <nav>
+            <ul>
+                <li class="nav-item active" data-tab="home"><i class="icon-home"></i> Inicio</li>
+                <li class="nav-item" data-tab="explore"><i class="icon-explore"></i> Explorar</li>
+                <li class="nav-item" data-tab="create"><i class="icon-create"></i> Crear</li>
+                <li class="nav-item" data-tab="connections"><i class="icon-connections"></i> Conexiones</li>
+                <li class="nav-item" data-tab="messages"><i class="icon-messages"></i> Mensajes</li>
+            </ul>
+        </nav>
+        <div class="profile-nav">
+            <span class="username">TuPerfil</span>
+            <div class="profile-pic"></div>
+            <span class="notifications-bell"><i class="icon-bell"></i><span class="notification-count">3</span></span>
+        </div>
+    </header>
+
+    <main class="content">
+        <section id="home" class="tab-content active">
+            <h2>Inicio</h2>
+            <div class="post-input">
+                <textarea placeholder="¿Qué chispa quieres compartir hoy?" id="postTextarea"></textarea>
+                <button class="spark-button" id="publishSparkBtn">Publicar Chispa</button>
+            </div>
+            <div class="feed" id="feedContainer">
+                <div class="post" data-post-id="1">
+                    <div class="post-header">
+                        <div class="user-avatar"></div>
+                        <span class="post-username">Usuario Ejemplo</span>
+                    </div>
+                    <div class="post-content">
+                        <p>¡Qué día tan increíble! ✨ #inspiracion</p>
+                        <div class="spark-burst-animation"></div> </div>
+                    <div class="post-actions">
+                        <button class="action-button react-button" data-reaction-type="like">❤️ Like</button>
+                        <button class="action-button comment-button">💬 Comentar</button>
+                    </div>
+                </div>
+                <div class="post" data-post-id="2">
+                    <div class="post-header">
+                        <div class="user-avatar" style="background-image: url('https://via.placeholder.com/50/FF3366/FFFFFF?text=A');"></div>
+                        <span class="post-username">ArtistaCreativo</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Creando algo nuevo, ¡pronto lo comparto! 🎨 #arte #proceso</p>
+                        <div class="spark-burst-animation"></div>
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-button react-button" data-reaction-type="like">❤️ Like</button>
+                        <button class="action-button comment-button">💬 Comentar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="explore" class="tab-content">
+            <h2>Explorar</h2>
+            <p>Descubre nuevas ideas y comunidades con nuestros Desafíos Spark y Canales de Tendencias.</p>
+            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Desafío Spark del Día: #MiMundoIdeal</h3>
+                <p>Comparte una imagen o video corto de cómo imaginas tu mundo ideal. ¡Las mejores chispas serán destacadas!</p>
+                <button class="spark-button" style="margin-top: 15px;">Participar</button>
+            </div>
+        </section>
+
+        <section id="create" class="tab-content">
+            <h2>Crear</h2>
+            <p>¡Libera tu creatividad con nuestras herramientas de edición!</p>
+            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Editor de Historias Animadas</h3>
+                <p>Crea videos cortos con efectos de partículas, filtros dinámicos y música sincronizada.</p>
+                <button class="spark-button" style="margin-top: 15px;">Abrir Editor</button>
+            </div>
+        </section>
+
+        <section id="connections" class="tab-content">
+            <h2>Conexiones</h2>
+            <p>Tu constelación personal de amigos y seguidores.</p>
+            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Sugerencias para ti</h3>
+                <ul>
+                    <li style="margin-bottom: 10px;">UsuarioGenial <button class="spark-button" style="padding: 5px 10px; font-size: 0.9em; margin-left: 10px;">Seguir</button></li>
+                    <li style="margin-bottom: 10px;">MenteCuriosa <button class="spark-button" style="padding: 5px 10px; font-size: 0.9em; margin-left: 10px;">Seguir</button></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="messages" class="tab-content">
+            <h2>Mensajes</h2>
+            <p>Tus conversaciones electrizantes.</p>
+            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Chats Recientes</h3>
+                <ul>
+                    <li style="margin-bottom: 10px;">**Amigo1:** Hola, ¿viste la nueva función? ✨</li>
+                    <li style="margin-bottom: 10px;">**Grupo de Estudio:** Recordatorio: Reunión hoy a las 5 PM. 🚀</li>
+                </ul>
+                <button class="spark-button" style="margin-top: 15px;">Nuevo Mensaje</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const feedContainer = document.getElementById('feedContainer');
+            const publishSparkBtn = document.getElementById('publishSparkBtn');
+            const postTextarea = document.getElementById('postTextarea');
+
+            // Función para cambiar de pestaña con animación
+            function changeTab(targetTabId) {
+                const currentActiveTab = document.querySelector('.tab-content.active');
+                const targetTab = document.getElementById(targetTabId);
+
+                if (currentActiveTab && currentActiveTab !== targetTab) {
+                    currentActiveTab.classList.remove('active');
+                    currentActiveTab.style.animation = 'slideOut var(--transition-speed) ease-out forwards';
+
+                    // Esperar a que termine la animación de salida para ocultar y luego mostrar la nueva
+                    setTimeout(() => {
+                        currentActiveTab.style.display = 'none'; // Realmente ocultar después de la animación
+                        currentActiveTab.style.animation = ''; // Resetear animación
+
+                        targetTab.style.display = 'block';
+                        targetTab.classList.add('active');
+                        targetTab.style.animation = 'slideIn var(--transition-speed) ease-out forwards';
+                    }, parseFloat(getComputedStyle(currentActiveTab).getPropertyValue('--transition-speed')) * 1000);
+
+                } else if (!currentActiveTab) { // Si no hay ninguna activa al inicio
+                    targetTab.style.display = 'block';
+                    targetTab.classList.add('active');
+                    targetTab.style.animation = 'slideIn var(--transition-speed) ease-out forwards';
+                }
+            }
+
+            // Manejar clics en la navegación
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+
+                    const targetTabId = item.dataset.tab;
+                    changeTab(targetTabId);
+                });
+            });
+
+            // Reacciones dinámicas al hacer clic en el botón "Like"
+            feedContainer.addEventListener('click', (event) => {
+                const target = event.target;
+                if (target.classList.contains('react-button') && target.dataset.reactionType === 'like') {
+                    const postElement = target.closest('.post');
+                    if (postElement) {
+                        const buttonRect = target.getBoundingClientRect();
+                        const postRect = postElement.getBoundingClientRect();
+
+                        // Calcular posición relativa dentro del post para las partículas
+                        const startX = buttonRect.left - postRect.left + buttonRect.width / 2;
+                        const startY = buttonRect.top - postRect.top + buttonRect.height / 2;
+
+                        for (let i = 0; i < 15; i++) { // Crear varias partículas
+                            const particle = document.createElement('div');
+                            particle.classList.add('reaction-particle');
+                            particle.style.left = `${startX}px`;
+                            particle.style.top = `${startY}px`;
+
+                            // Randomize destination for explosion effect
+                            const endX = startX + (Math.random() - 0.5) * 100; // -50 to +50 from center
+                            const endY = startY + (Math.random() - 0.5) * 100;
+
+                            // Randomize size and color
+                            const size = Math.random() * 8 + 4; // 4px to 12px
+                            const hue = Math.random() * 360; // Full color spectrum
+                            const saturation = Math.random() * 50 + 50; // 50-100% saturation
+                            const lightness = Math.random() * 20 + 70; // 70-90% lightness
+                            particle.style.width = `${size}px`;
+                            particle.style.height = `${size}px`;
+                            particle.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+
+                            // Apply custom properties for keyframe animation
+                            particle.style.setProperty('--x', `${endX - startX}px`);
+                            particle.style.setProperty('--y', `${endY - startY}px`);
+
+                            postElement.appendChild(particle);
+
+                            // Eliminar la partícula después de la animación
+                            particle.addEventListener('animationend', () => {
+                                particle.remove();
+                            });
+                        }
+                    }
+                }
+            });
+
+            // Simular publicación con animación "Spark Burst"
+            publishSparkBtn.addEventListener('click', () => {
+                const postContent = postTextarea.value.trim();
+                if (postContent) {
+                    const newPost = document.createElement('div');
+                    newPost.classList.add('post');
+                    newPost.setAttribute('data-post-id', Date.now()); // ID único
+
+                    newPost.innerHTML = `
+                        <div class="post-header">
+                            <div class="user-avatar" style="background-image: url('https://via.placeholder.com/50/6a00ff/FFFFFF?text=M');"></div>
+                            <span class="post-username">Tú</span>
+                        </div>
+                        <div class="post-content">
+                            <p>${postContent}</p>
+                            <div class="spark-burst-animation"></div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-button react-button" data-reaction-type="like">❤️ Like</button>
+                            <button class="action-button comment-button">💬 Comentar</button>
+                        </div>
+                    `;
+                    // Añadir la nueva publicación al inicio del feed
+                    feedContainer.prepend(newPost);
+                    postTextarea.value = ''; // Limpiar el textarea
+
+                    // Activar la animación de "Spark Burst"
+                    const sparkBurstElement = newPost.querySelector('.spark-burst-animation');
+                    if (sparkBurstElement) {
+                        sparkBurstElement.classList.add('active');
+                        // Remover la clase 'active' después de la animación para futuras publicaciones
+                        sparkBurstElement.addEventListener('animationend', () => {
+                            sparkBurstElement.classList.remove('active');
+                        }, { once: true });
+                    }
+
+                    // Pequeña animación de escala para la nueva publicación
+                    newPost.style.transform = 'scale(0.9)';
+                    newPost.style.opacity = '0';
+                    setTimeout(() => {
+                        newPost.style.transition = 'all 0.5s ease-out';
+                        newPost.style.transform = 'scale(1)';
+                        newPost.style.opacity = '1';
+                    }, 50); // Pequeño retraso para que CSS aplique el estado inicial
+                } else {
+                    alert('¡No puedes publicar una chispa vacía!');
+                }
+            });
+
+            // Inicializar la pestaña activa al cargar la página
+            changeTab('home');
+        });
+    </script>
+</body>
+</html>
