@@ -37,10 +37,10 @@
         /* Navbar */
         .navbar {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column; /* Cambia a columna en móvil */
             align-items: center;
             background-color: var(--background-light);
-            padding: 15px 30px;
+            padding: 15px 10px; /* Menos padding en móvil */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
@@ -49,11 +49,12 @@
         }
 
         .navbar .logo {
-            font-size: 1.8em;
+            font-size: 1.6em; /* Un poco más pequeño para móvil */
             font-weight: 700;
             color: var(--secondary-color);
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            animation: pulse 2s infinite alternate; /* Animación simple para el logo */
+            animation: pulse 2s infinite alternate;
+            margin-bottom: 15px; /* Espacio debajo del logo */
         }
 
         @keyframes pulse {
@@ -63,30 +64,34 @@
 
         .navbar nav ul {
             display: flex;
+            flex-wrap: wrap; /* Permite que los elementos de navegación se envuelvan */
+            justify-content: center; /* Centra los elementos */
             list-style: none;
+            width: 100%; /* Ocupa todo el ancho disponible */
         }
 
         .navbar nav ul li {
-            margin-right: 30px;
+            margin: 5px 8px; /* Márgenes más compactos */
             cursor: pointer;
-            padding: 10px 15px;
+            padding: 8px 12px; /* Padding más pequeño para botones táctiles */
             border-radius: 8px;
             transition: all var(--transition-speed) ease;
             display: flex;
             align-items: center;
             font-weight: 600;
+            font-size: 0.9em; /* Fuente más pequeña */
         }
 
         .navbar nav ul li:hover,
         .navbar nav ul li.active {
             background-color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(106, 0, 255, 0.4);
+            transform: translateY(-2px); /* Menos desplazamiento */
+            box-shadow: 0 3px 10px rgba(106, 0, 255, 0.4); /* Sombra más sutil */
         }
 
         .navbar nav ul li i {
-            margin-right: 8px;
-            font-size: 1.2em; /* Íconos (usar Font Awesome o similar) */
+            margin-right: 6px; /* Menos margen para el ícono */
+            font-size: 1.1em;
         }
 
         /* Placeholders para iconos (reemplazar con Font Awesome o SVGs) */
@@ -100,23 +105,22 @@
         .profile-nav {
             display: flex;
             align-items: center;
+            margin-top: 15px; /* Espacio superior para separar de la navegación */
         }
 
         .profile-nav .username {
-            margin-right: 15px;
-            font-weight: 600;
-            color: var(--secondary-color);
+            display: none; /* Ocultar nombre de usuario en móviles pequeños */
         }
 
         .profile-nav .profile-pic {
-            width: 40px;
-            height: 40px;
+            width: 35px; /* Más pequeño para móvil */
+            height: 35px;
             background-color: var(--accent-color);
             border-radius: 50%;
-            margin-right: 15px;
+            margin-right: 10px; /* Menos margen */
             border: 2px solid var(--secondary-color);
             cursor: pointer;
-            background-image: url('https://via.placeholder.com/40/FF3366/FFFFFF?text=P'); /* Placeholder de imagen de perfil */
+            background-image: url('https://via.placeholder.com/35/FF3366/FFFFFF?text=P');
             background-size: cover;
             background-position: center;
         }
@@ -129,34 +133,34 @@
         .notification-count {
             background-color: var(--accent-color);
             color: white;
-            font-size: 0.7em;
-            padding: 3px 7px;
+            font-size: 0.6em; /* Tamaño más pequeño */
+            padding: 2px 6px; /* Padding ajustado */
             border-radius: 50%;
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -3px; /* Ajuste de posición */
+            right: -3px;
             border: 1px solid var(--background-dark);
         }
 
         /* Contenido Principal */
         .content {
-            padding: 20px;
-            max-width: 900px;
-            margin: 20px auto;
+            padding: 15px; /* Menos padding general */
+            max-width: 100%; /* Ocupa todo el ancho */
+            margin: 10px auto; /* Márgenes ajustados */
             background-color: var(--background-light);
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            min-height: 70vh;
-            position: relative; /* Para las transiciones de las pestañas */
-            overflow: hidden; /* Para que las animaciones de salida no se desborden */
+            border-radius: 8px; /* Bordes más suaves */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Sombra ajustada */
+            min-height: 80vh; /* Mayor altura para que el contenido sea visible */
+            position: relative;
+            overflow: hidden;
         }
 
         .tab-content {
-            display: none; /* Ocultar todas las pestañas por defecto */
+            display: none;
             animation: fadeIn 0.6s ease-out forwards;
             position: absolute;
-            width: calc(100% - 40px); /* Ajustar al padding del content */
-            padding: 20px 0;
+            width: calc(100% - 30px); /* Ajustar al padding del content */
+            padding: 15px 0; /* Padding ajustado */
             opacity: 0;
             transform: translateX(100%);
         }
@@ -164,7 +168,7 @@
         .tab-content.active {
             display: block;
             animation: slideIn var(--transition-speed) ease-out forwards;
-            position: relative; /* Restablecer la posición para la pestaña activa */
+            position: relative;
             opacity: 1;
             transform: translateX(0);
         }
@@ -181,11 +185,10 @@
             to { transform: translateX(-100%); opacity: 0; }
         }
 
-
         .tab-content h2 {
             color: var(--secondary-color);
-            margin-bottom: 25px;
-            font-size: 2em;
+            margin-bottom: 20px; /* Menos margen */
+            font-size: 1.8em; /* Tamaño de fuente ajustado */
             text-align: center;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
         }
@@ -193,26 +196,26 @@
         /* Input de Publicación */
         .post-input {
             background-color: var(--background-dark);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
+            padding: 15px; /* Menos padding */
+            border-radius: 8px; /* Bordes más suaves */
+            margin-bottom: 20px; /* Menos margen */
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px; /* Menos espacio entre elementos */
         }
 
         .post-input textarea {
             width: 100%;
-            padding: 15px;
+            padding: 12px; /* Menos padding */
             border: 2px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 6px; /* Bordes más suaves */
             background-color: #3a3a60;
             color: var(--text-color);
             font-family: var(--font-stack);
-            font-size: 1em;
+            font-size: 0.9em; /* Fuente más pequeña */
             resize: vertical;
-            min-height: 80px;
+            min-height: 70px; /* Altura mínima ajustada */
             transition: border-color 0.3s ease;
         }
 
@@ -226,51 +229,51 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 10px 20px; /* Padding ajustado */
+            border-radius: 6px; /* Bordes más suaves */
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1em; /* Tamaño de fuente ajustado */
             font-weight: 600;
             transition: all 0.3s ease;
-            align-self: flex-end; /* Alinear a la derecha */
+            align-self: flex-end;
         }
 
         .spark-button:hover {
             background-color: #8c4bff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(106, 0, 255, 0.5);
+            transform: translateY(-1px); /* Menos desplazamiento */
+            box-shadow: 0 3px 8px rgba(106, 0, 255, 0.5); /* Sombra ajustada */
         }
 
         /* Feed de Publicaciones */
         .feed {
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px; /* Menos espacio entre publicaciones */
         }
 
         .post {
             background-color: var(--background-dark);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 15px; /* Menos padding */
+            border-radius: 8px; /* Bordes más suaves */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Sombra ajustada */
             position: relative;
-            overflow: hidden; /* Para contener las animaciones de explosión */
+            overflow: hidden;
         }
 
         .post-header {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Menos margen */
         }
 
         .user-avatar {
-            width: 50px;
-            height: 50px;
+            width: 45px; /* Más pequeño para móvil */
+            height: 45px;
             background-color: var(--secondary-color);
             border-radius: 50%;
-            margin-right: 15px;
+            margin-right: 10px;
             border: 2px solid var(--accent-color);
-            background-image: url('https://via.placeholder.com/50/00E676/FFFFFF?text=U'); /* Placeholder de avatar */
+            background-image: url('https://via.placeholder.com/45/00E676/FFFFFF?text=U');
             background-size: cover;
             background-position: center;
         }
@@ -278,21 +281,21 @@
         .post-username {
             font-weight: 700;
             color: var(--secondary-color);
-            font-size: 1.1em;
+            font-size: 1em; /* Tamaño de fuente ajustado */
         }
 
         .post-content p {
-            margin-bottom: 15px;
-            font-size: 1em;
+            margin-bottom: 10px; /* Menos margen */
+            font-size: 0.95em; /* Fuente ligeramente más pequeña */
             color: var(--text-color);
         }
 
         .post-actions {
             display: flex;
-            gap: 15px;
+            gap: 10px; /* Menos espacio entre botones */
             border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-            margin-top: 15px;
+            padding-top: 10px; /* Menos padding */
+            margin-top: 10px; /* Menos margen */
         }
 
         .action-button {
@@ -300,9 +303,9 @@
             border: none;
             color: var(--text-color);
             cursor: pointer;
-            font-size: 1em;
-            padding: 8px 12px;
-            border-radius: 6px;
+            font-size: 0.9em; /* Fuente más pequeña */
+            padding: 6px 10px; /* Padding ajustado */
+            border-radius: 5px; /* Bordes más suaves */
             transition: background-color 0.3s ease, transform 0.2s ease;
             display: flex;
             align-items: center;
@@ -311,11 +314,11 @@
 
         .action-button:hover {
             background-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .react-button {
-            color: var(--accent-color); /* Color específico para el botón de reacción */
+            color: var(--accent-color);
         }
 
         /* Animaciones */
@@ -323,7 +326,7 @@
         /* Partículas de reacción */
         .reaction-particle {
             position: absolute;
-            background-color: var(--accent-color); /* Color por defecto, se puede cambiar con JS */
+            background-color: var(--accent-color);
             border-radius: 50%;
             pointer-events: none;
             opacity: 0;
@@ -345,10 +348,10 @@
         /* Animación para el spark burst (ejemplo básico) */
         .spark-burst-animation {
             position: relative;
-            height: 50px; /* Ajusta la altura según sea necesario */
-            margin-top: 10px;
+            height: 40px; /* Altura ajustada */
+            margin-top: 8px;
             overflow: hidden;
-            display: none; /* Oculto por defecto */
+            display: none;
         }
 
         .spark-burst-animation.active {
@@ -378,63 +381,25 @@
 
         @keyframes burstEffect {
             0% { width: 0; height: 0; opacity: 0.8; }
-            50% { width: 100px; height: 100px; opacity: 0.4; }
-            100% { width: 200px; height: 200px; opacity: 0; }
+            50% { width: 80px; height: 80px; opacity: 0.4; } /* Tamaño ajustado */
+            100% { width: 160px; height: 160px; opacity: 0; } /* Tamaño ajustado */
         }
 
-        /* Media Queries para Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 15px 10px;
-            }
-
-            .navbar nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-                margin-top: 15px;
-            }
-
-            .navbar nav ul li {
-                margin: 5px 10px;
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-
-            .profile-nav {
-                margin-top: 15px;
-            }
-
-            .content {
-                margin: 10px auto;
-                padding: 15px;
-            }
-
-            .tab-content h2 {
-                font-size: 1.6em;
-            }
-
-            .post-input textarea {
-                min-height: 60px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar .logo {
-                font-size: 1.5em;
-            }
-            .profile-nav .username {
-                display: none; /* Ocultar nombre en móviles muy pequeños */
-            }
-            .profile-nav .profile-pic {
-                margin-right: 5px;
+        /* Media Queries (específicos para tamaños de celular, aunque ya ajustamos todo antes) */
+        @media (max-width: 600px) {
+            /* Estos estilos ya están cubiertos en los ajustes generales,
+               pero se pueden usar para afinar detalles aún más pequeños. */
+            body {
+                font-size: 15px; /* Ajuste global para texto */
             }
             .navbar nav ul li {
-                margin: 3px 5px;
-                font-size: 0.8em;
+                font-size: 0.85em;
+                margin: 4px 6px;
+                padding: 7px 10px;
             }
-            .action-button {
-                font-size: 0.9em;
+            .spark-button {
+                padding: 9px 18px;
+                font-size: 0.95em;
             }
         }
 
@@ -482,7 +447,7 @@
                 </div>
                 <div class="post" data-post-id="2">
                     <div class="post-header">
-                        <div class="user-avatar" style="background-image: url('https://via.placeholder.com/50/FF3366/FFFFFF?text=A');"></div>
+                        <div class="user-avatar" style="background-image: url('https://via.placeholder.com/45/FF3366/FFFFFF?text=A');"></div>
                         <span class="post-username">ArtistaCreativo</span>
                     </div>
                     <div class="post-content">
@@ -500,31 +465,31 @@
         <section id="explore" class="tab-content">
             <h2>Explorar</h2>
             <p>Descubre nuevas ideas y comunidades con nuestros Desafíos Spark y Canales de Tendencias.</p>
-            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <div style="background-color: #3a3a60; padding: 15px; border-radius: 8px; margin-top: 15px;">
                 <h3>Desafío Spark del Día: #MiMundoIdeal</h3>
                 <p>Comparte una imagen o video corto de cómo imaginas tu mundo ideal. ¡Las mejores chispas serán destacadas!</p>
-                <button class="spark-button" style="margin-top: 15px;">Participar</button>
+                <button class="spark-button" style="margin-top: 12px;">Participar</button>
             </div>
         </section>
 
         <section id="create" class="tab-content">
             <h2>Crear</h2>
             <p>¡Libera tu creatividad con nuestras herramientas de edición!</p>
-            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <div style="background-color: #3a3a60; padding: 15px; border-radius: 8px; margin-top: 15px;">
                 <h3>Editor de Historias Animadas</h3>
                 <p>Crea videos cortos con efectos de partículas, filtros dinámicos y música sincronizada.</p>
-                <button class="spark-button" style="margin-top: 15px;">Abrir Editor</button>
+                <button class="spark-button" style="margin-top: 12px;">Abrir Editor</button>
             </div>
         </section>
 
         <section id="connections" class="tab-content">
             <h2>Conexiones</h2>
             <p>Tu constelación personal de amigos y seguidores.</p>
-            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <div style="background-color: #3a3a60; padding: 15px; border-radius: 8px; margin-top: 15px;">
                 <h3>Sugerencias para ti</h3>
                 <ul>
-                    <li style="margin-bottom: 10px;">UsuarioGenial <button class="spark-button" style="padding: 5px 10px; font-size: 0.9em; margin-left: 10px;">Seguir</button></li>
-                    <li style="margin-bottom: 10px;">MenteCuriosa <button class="spark-button" style="padding: 5px 10px; font-size: 0.9em; margin-left: 10px;">Seguir</button></li>
+                    <li style="margin-bottom: 8px;">UsuarioGenial <button class="spark-button" style="padding: 4px 8px; font-size: 0.8em; margin-left: 8px;">Seguir</button></li>
+                    <li style="margin-bottom: 8px;">MenteCuriosa <button class="spark-button" style="padding: 4px 8px; font-size: 0.8em; margin-left: 8px;">Seguir</button></li>
                 </ul>
             </div>
         </section>
@@ -532,13 +497,13 @@
         <section id="messages" class="tab-content">
             <h2>Mensajes</h2>
             <p>Tus conversaciones electrizantes.</p>
-            <div style="background-color: #3a3a60; padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <div style="background-color: #3a3a60; padding: 15px; border-radius: 8px; margin-top: 15px;">
                 <h3>Chats Recientes</h3>
                 <ul>
-                    <li style="margin-bottom: 10px;">**Amigo1:** Hola, ¿viste la nueva función? ✨</li>
-                    <li style="margin-bottom: 10px;">**Grupo de Estudio:** Recordatorio: Reunión hoy a las 5 PM. 🚀</li>
+                    <li style="margin-bottom: 8px;">**Amigo1:** Hola, ¿viste la nueva función? ✨</li>
+                    <li style="margin-bottom: 8px;">**Grupo de Estudio:** Recordatorio: Reunión hoy a las 5 PM. 🚀</li>
                 </ul>
-                <button class="spark-button" style="margin-top: 15px;">Nuevo Mensaje</button>
+                <button class="spark-button" style="margin-top: 12px;">Nuevo Mensaje</button>
             </div>
         </section>
     </main>
@@ -608,11 +573,11 @@
                             particle.style.top = `${startY}px`;
 
                             // Randomize destination for explosion effect
-                            const endX = startX + (Math.random() - 0.5) * 100; // -50 to +50 from center
-                            const endY = startY + (Math.random() - 0.5) * 100;
+                            const endX = startX + (Math.random() - 0.5) * 80; // -40 to +40 from center (más compacto)
+                            const endY = startY + (Math.random() - 0.5) * 80;
 
                             // Randomize size and color
-                            const size = Math.random() * 8 + 4; // 4px to 12px
+                            const size = Math.random() * 6 + 3; // 3px to 9px (más pequeño)
                             const hue = Math.random() * 360; // Full color spectrum
                             const saturation = Math.random() * 50 + 50; // 50-100% saturation
                             const lightness = Math.random() * 20 + 70; // 70-90% lightness
@@ -645,7 +610,7 @@
 
                     newPost.innerHTML = `
                         <div class="post-header">
-                            <div class="user-avatar" style="background-image: url('https://via.placeholder.com/50/6a00ff/FFFFFF?text=M');"></div>
+                            <div class="user-avatar" style="background-image: url('https://via.placeholder.com/45/6a00ff/FFFFFF?text=M');"></div>
                             <span class="post-username">Tú</span>
                         </div>
                         <div class="post-content">
